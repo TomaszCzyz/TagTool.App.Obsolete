@@ -34,6 +34,13 @@
                 SemanticProperties.Hint="Counts the number of times you click"
                 Clicked="OnCounterClicked"
                 HorizontalOptions="Center" />
+            
+            <Button
+              x:Name="CreateTagBtn"
+              Text="CreateTag"
+              SemanticProperties.Hint="Create new tag if not exists"
+              Clicked="OnCreateTagClicked"
+              HorizontalOptions="Center" />
 
         </VerticalStackLayout>
     </ScrollView>

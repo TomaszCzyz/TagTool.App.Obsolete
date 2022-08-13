@@ -1,24 +1,34 @@
-﻿namespace TagTool.App;
+using TagTool.App.Services;
+using TagTool.Backend;
+
+namespace TagTool.App;
 
 public partial class MainPage : ContentPage
 {
-	int count = 0;
+    private int _count;
 
-	public MainPage()
-	{
-		InitializeComponent();
-	}
+    public MainPage()
+    {
+        InitializeComponent();
+    }
 
-	private void OnCounterClicked(object sender, EventArgs e)
-	{
-		count++;
+    private void OnCounterClicked(object sender, EventArgs e)
+    {
+        _count++;
 
-		if (count == 1)
-			CounterBtn.Text = $"Clicked {count} time";
-		else
-			CounterBtn.Text = $"Clicked {count} times";
+        if (_count == 1)
+            CounterBtn.Text = $"Clicked {_count} time";
+        else
+            CounterBtn.Text = $"Clicked {_count} times";
 
-		SemanticScreenReader.Announce(CounterBtn.Text);
-	}
+        SemanticScreenReader.Announce(CounterBtn.Text);
+    }
+
+    private void OnCreateTagClicked(object sender, EventArgs e)
+    {
+        var channel = UnixDomainSocketConnectionFactory.CreateChannel();
+        var tagToolService = new TagToolService.TagToolServiceClient(channel);
+
+        tagToolService.CreateTag(new CreateTagRequest { TagName = "TagFromMaui2" });
+    }
 }
-
