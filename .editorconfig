@@ -398,6 +398,7 @@ dotnet_diagnostic.RCS0023.severity = warning
 dotnet_diagnostic.RCS0056.severity = warning
 dotnet_diagnostic.RCS0045.severity = none
 dotnet_diagnostic.RCS0044.severity = warning
+dotnet_diagnostic.CS1591.severity = none
 
 
 dotnet_diagnostic.RCS1014.severity = none
