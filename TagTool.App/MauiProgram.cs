@@ -1,3 +1,4 @@
+using TagTool.App.Pages;
 using TagTool.App.Services;
 using TagTool.Backend;
 
@@ -16,11 +17,13 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
 
-        builder.Services.AddScoped(_ => // todo: make sure if AddSingleton would not be better here 
+        builder.Services.AddScoped(_ => // todo: make sure if AddSingleton would not be better here
         {
             var channel = UnixDomainSocketConnectionFactory.CreateChannel();
             return new TagToolService.TagToolServiceClient(channel);
         });
+        builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddSingleton<MainPageViewModel>();
 
         return builder.Build();
     }

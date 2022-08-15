@@ -1,7 +1,13 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
+
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="TagTool.App.MainPage">
+             xmlns:pages="clr-namespace:TagTool.App.Pages"
+             x:Class="TagTool.App.Pages.MainPage"
+             x:DataType="pages:MainPageViewModel">
+    <!-- <ContentPage.BindingContext> -->
+    <!--   <pages:MainPageViewModel /> -->
+    <!-- </ContentPage.BindingContext> -->
 
     <ScrollView>
         <VerticalStackLayout
@@ -29,18 +35,20 @@
                 HorizontalOptions="Center" />
 
             <Button
-                x:Name="CounterBtn"
-                Text="Click me"
+                Text="{Binding BtnText, Mode=OneWay}"
+                Command="{Binding CounterClickedCommand}"
                 SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
                 HorizontalOptions="Center" />
             
-            <Button
-              x:Name="CreateTagBtn"
-              Text="CreateTag"
-              SemanticProperties.Hint="Create new tag if not exists"
-              Clicked="OnCreateTagClicked"
-              HorizontalOptions="Center" />
+            <StackLayout>
+              <SearchBar x:Name="SearchBar"
+                         Placeholder="enter tag name"
+                         Text="{Binding SearchBarText, Mode=TwoWay}"
+                         SearchCommand="{Binding PerformSearchCommand}"
+                         SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}"/>
+              <ListView x:Name="TagsSearchResults"
+                        ItemsSource="{Binding TagsSearchResults}" />
+            </StackLayout>
 
         </VerticalStackLayout>
     </ScrollView>
