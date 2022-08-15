@@ -1,17 +1,23 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Grpc.Core;
+using Microsoft.Extensions.Logging;
 using TagTool.Backend;
 
 namespace TagTool.App.Pages;
 
-public partial class MainPageViewModel : ObservableObject
+public partial class MainPageViewModel : ObservableObject, IDisposable
 {
-    private readonly TagToolService.TagToolServiceClient _tagToolServiceClient;
+    private readonly ILogger<MainPageViewModel> _logger;
+    private readonly TagSearchService.TagSearchServiceClient _tagSearchServiceClient;
 
-    public MainPageViewModel(TagToolService.TagToolServiceClient tagToolServiceClient)
+    public MainPageViewModel(
+        ILogger<MainPageViewModel> logger,
+        TagSearchService.TagSearchServiceClient tagSearchServiceClient)
     {
-        _tagToolServiceClient = tagToolServiceClient;
+        _logger = logger;
+        _tagSearchServiceClient = tagSearchServiceClient;
         _tagsSearchResults = new ObservableCollection<string>();
     }
 
@@ -20,15 +26,38 @@ public partial class MainPageViewModel : ObservableObject
 
     [ObservableProperty]
     private string _btnText = "Click me!";
-    
-    [ObservableProperty] 
-    private object _searchBarText = "";
+
+    [ObservableProperty]
+    private string _searchBarText = "";
+
+    private CancellationTokenSource? _cts;
 
     private int _count;
 
-    partial void OnSearchBarTextChanged(object value)
+    async partial void OnSearchBarTextChanged(string value)
     {
-        _tagToolServiceClient.CreateTag(new CreateTagRequest { TagName = (string)value });
+        _tagsSearchResults.Clear();
+        _cts?.Cancel();
+        _cts?.Dispose();
+        _cts = new CancellationTokenSource();
+
+        var findTagsRequest = new FindTagsRequest { PartialTagName = value, MaxReturn = 10 };
+        var callOptions = new CallOptions(cancellationToken: _cts.Token);
+
+        using var streamingCall = _tagSearchServiceClient.FindTags(findTagsRequest, callOptions);
+
+        try
+        {
+            while (await streamingCall.ResponseStream.MoveNext(_cts.Token))
+            {
+                var findTagsReply = streamingCall.ResponseStream.Current;
+                _tagsSearchResults.Add(findTagsReply.TagName);
+            }
+        }
+        catch (RpcException e) when (e.Status.StatusCode == StatusCode.Cancelled)
+        {
+            _logger.LogDebug("Streaming of tag names hints for SearchBar was cancelled");
+        }
     }
 
     [RelayCommand]
@@ -45,11 +74,9 @@ public partial class MainPageViewModel : ObservableObject
         BtnText = "Performed search";
     }
 
-    // private void OnCreateTagClicked(object sender, EventArgs e)
-    // {
-    //     var channel = UnixDomainSocketConnectionFactory.CreateChannel();
-    //     var tagToolService = new TagToolService.TagToolServiceClient(channel);
-    //
-    //     tagToolService.CreateTag(new CreateTagRequest { TagName = "TagFromMaui2" });
-    // }
+    public void Dispose()
+    {
+        _cts?.Dispose();
+        GC.SuppressFinalize(this);
+    }
 }

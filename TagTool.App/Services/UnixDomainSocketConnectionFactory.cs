@@ -20,8 +20,9 @@ public class UnixDomainSocketConnectionFactory
         var udsEndPoint = new UnixDomainSocketEndPoint(_socketPath);
         var connectionFactory = new UnixDomainSocketConnectionFactory(udsEndPoint);
         var socketsHttpHandler = new SocketsHttpHandler { ConnectCallback = connectionFactory.ConnectAsync };
+        var grpcChannelOptions = new GrpcChannelOptions { HttpHandler = socketsHttpHandler, ThrowOperationCanceledOnCancellation = false};
 
-        return GrpcChannel.ForAddress("http://localhost", new GrpcChannelOptions { HttpHandler = socketsHttpHandler });
+        return GrpcChannel.ForAddress("http://localhost", grpcChannelOptions);
     }
 
     private async ValueTask<Stream> ConnectAsync(SocketsHttpConnectionContext _,

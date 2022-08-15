@@ -9,7 +9,7 @@
     <!--   <pages:MainPageViewModel /> -->
     <!-- </ContentPage.BindingContext> -->
 
-    <ScrollView>
+    <StackLayout>
         <VerticalStackLayout
             Spacing="25"
             Padding="30,0"
@@ -46,11 +46,11 @@
                          Text="{Binding SearchBarText, Mode=TwoWay}"
                          SearchCommand="{Binding PerformSearchCommand}"
                          SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}"/>
-              <ListView x:Name="TagsSearchResults"
-                        ItemsSource="{Binding TagsSearchResults}" />
+              <ListView ItemsSource="{Binding TagsSearchResults}" 
+                        VerticalOptions="Fill"/>
             </StackLayout>
 
         </VerticalStackLayout>
-    </ScrollView>
+    </StackLayout>
 
 </ContentPage>
