@@ -3,13 +3,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pages="clr-namespace:TagTool.App.Pages"
-             xmlns:helpers="clr-namespace:TagTool.App.Helpers"
              xmlns:views="clr-namespace:TagTool.App.Views"
              x:Class="TagTool.App.Pages.MainPage"
              x:DataType="pages:MainPageViewModel">
-    <!-- <ContentPage.BindingContext> -->
-    <!--   <pages:MainPageViewModel /> -->
-    <!-- </ContentPage.BindingContext> -->
 
     <StackLayout>
         <VerticalStackLayout
@@ -53,7 +49,7 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <views:HighlightedTextView />
+                                <views:HighlightedLabelView />
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>

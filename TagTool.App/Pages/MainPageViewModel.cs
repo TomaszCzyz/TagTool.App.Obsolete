@@ -59,7 +59,7 @@ public partial class MainPageViewModel : ObservableObject, IDisposable
                 var viewListItem = new ViewListItem
                 {
                     Text = reply.MatchedTagName,
-                    Score = reply.LongestMatch * 10 - reply.LongestMatchStartIndex,
+                    Score = reply.Score,
                     HighlightInfos = reply.MatchedParts.Select(match => new HighlightInfo(match.StartIndex, match.Length))
                 };
                 
