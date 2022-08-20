@@ -63,7 +63,6 @@ public partial class MainPageViewModel : ObservableObject, IDisposable
                     HighlightedText = HighlightText(reply.MatchedTagName, highlightInfos), Score = reply.Score
                 };
 
-                // AddInScoreOder(viewListItem);
                 TagsSearchResults.Add(viewListItem);
             }
         }
@@ -120,26 +119,6 @@ public partial class MainPageViewModel : ObservableObject, IDisposable
         FlushNotHighlighted();
 
         return formattedString;
-    }
-
-    private void AddInScoreOder(HighlightedMatch highlightedMatch)
-    {
-        const int maxCapacity = 3;
-        if (TagsSearchResults.Count == maxCapacity)
-        {
-            TagsSearchResults.RemoveAt(TagsSearchResults.Count - 1);
-        }
-
-        if (TagsSearchResults.Count == 0)
-        {
-            TagsSearchResults.Add(highlightedMatch);
-            return;
-        }
-
-        var index = 0;
-        while (index < TagsSearchResults.Count && TagsSearchResults[index].Score > highlightedMatch.Score) index++;
-
-        TagsSearchResults.Insert(index, highlightedMatch);
     }
 
     [RelayCommand]
