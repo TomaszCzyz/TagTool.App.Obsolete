@@ -8,8 +8,6 @@ using TagTool.Backend;
 
 namespace TagTool.App.Pages;
 
-public record HighlightInfo(int StartIndex, int Length);
-
 public partial class MainPageViewModel : ObservableObject, IDisposable
 {
     private readonly ILogger<MainPageViewModel> _logger;
@@ -21,11 +19,11 @@ public partial class MainPageViewModel : ObservableObject, IDisposable
     {
         _logger = logger;
         _tagSearchServiceClient = tagSearchServiceClient;
-        _tagsSearchResults = new ObservableCollection<ViewListItem>();
+        _tagsSearchResults = new ObservableCollection<HighlightedMatch>();
     }
 
     [ObservableProperty]
-    private ObservableCollection<ViewListItem> _tagsSearchResults;
+    private ObservableCollection<HighlightedMatch> _tagsSearchResults;
 
     [ObservableProperty]
     private string _btnText = "Click me!";
@@ -40,7 +38,7 @@ public partial class MainPageViewModel : ObservableObject, IDisposable
     async partial void OnSearchBarTextChanged(string value) // todo: make sure that async void won't be a problem here
     {
         // todo: throttle this method to avoid too many calls
-        _tagsSearchResults.Clear();
+        TagsSearchResults.Clear();
         _cts?.Cancel();
         _cts?.Dispose();
         _cts = new CancellationTokenSource();
@@ -56,33 +54,92 @@ public partial class MainPageViewModel : ObservableObject, IDisposable
             {
                 var reply = streamingCall.ResponseStream.Current;
 
-                var viewListItem = new ViewListItem
-                {
-                    Text = reply.MatchedTagName,
-                    Score = reply.Score,
-                    HighlightInfos = reply.MatchedParts.Select(match => new HighlightInfo(match.StartIndex, match.Length))
-                };
-                
-                _tagsSearchResults.Add(viewListItem);
+                var highlightInfos = reply.MatchedParts
+                    .Select(match => new HighlightInfo(match.StartIndex, match.Length))
+                    .ToArray();
 
-                // var index = _tagsSearchResults
-                //     .ToList()
-                //     .BinarySearch(viewListItem, ViewListItem.ScoreComparer); // todo: optimize
-                //
-                // if (index >= 0)
-                // {
-                //     _tagsSearchResults.Insert(index, viewListItem);
-                // }
-                // else
-                // {
-                //     _tagsSearchResults.Insert(_tagsSearchResults.Count + index, viewListItem);
-                // }
+                var viewListItem = new HighlightedMatch
+                {
+                    HighlightedText = HighlightText(reply.MatchedTagName, highlightInfos), Score = reply.Score
+                };
+
+                // AddInScoreOder(viewListItem);
+                TagsSearchResults.Add(viewListItem);
             }
         }
         catch (RpcException e) when (e.Status.StatusCode == StatusCode.Cancelled)
         {
             _logger.LogDebug("Streaming of tag names hints for SearchBar was cancelled");
         }
+        finally
+        {
+            // todo: do not create new class... manage existing collection
+            TagsSearchResults = new ObservableCollection<HighlightedMatch>(TagsSearchResults.OrderByDescending(item => item.Score));
+        }
+    }
+
+    private static FormattedString HighlightText(string tagName, IReadOnlyCollection<HighlightInfo> highlightInfos)
+    {
+        var formattedString = new FormattedString();
+
+        var lastIndex = 0;
+        var index = 0;
+
+        void FlushNotHighlighted()
+        {
+            if (lastIndex == index) return;
+
+            formattedString.Spans.Add(new Span { Text = tagName[lastIndex..index] });
+        }
+
+        while (index < tagName.Length)
+        {
+            var highlightedPart = highlightInfos.FirstOrDefault(info => info.StartIndex == index);
+
+            if (highlightedPart is null)
+            {
+                index++;
+            }
+            else
+            {
+                FlushNotHighlighted();
+
+                formattedString.Spans.Add(
+                    new Span
+                    {
+                        Text = tagName[index..(index + highlightedPart.Length)],
+                        TextColor = Colors.Green,
+                        FontAttributes = FontAttributes.Bold,
+                        BackgroundColor = Colors.Azure
+                    });
+                index += highlightedPart.Length;
+                lastIndex = index;
+            }
+        }
+
+        FlushNotHighlighted();
+
+        return formattedString;
+    }
+
+    private void AddInScoreOder(HighlightedMatch highlightedMatch)
+    {
+        const int maxCapacity = 3;
+        if (TagsSearchResults.Count == maxCapacity)
+        {
+            TagsSearchResults.RemoveAt(TagsSearchResults.Count - 1);
+        }
+
+        if (TagsSearchResults.Count == 0)
+        {
+            TagsSearchResults.Add(highlightedMatch);
+            return;
+        }
+
+        var index = 0;
+        while (index < TagsSearchResults.Count && TagsSearchResults[index].Score > highlightedMatch.Score) index++;
+
+        TagsSearchResults.Insert(index, highlightedMatch);
     }
 
     [RelayCommand]

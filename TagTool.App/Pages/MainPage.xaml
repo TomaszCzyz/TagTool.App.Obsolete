@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pages="clr-namespace:TagTool.App.Pages"
              xmlns:views="clr-namespace:TagTool.App.Views"
+             xmlns:helpers="using:TagTool.App.Helpers"
              x:Class="TagTool.App.Pages.MainPage"
              x:DataType="pages:MainPageViewModel">
 
@@ -49,7 +50,9 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <views:HighlightedLabelView />
+                                <Label
+                                    x:DataType="helpers:HighlightedMatch"
+                                    FormattedText="{Binding HighlightedText}"/>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
