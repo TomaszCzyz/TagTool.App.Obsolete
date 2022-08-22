@@ -1,10 +1,9 @@
-﻿namespace TagTool.App.Resources.Themes
+﻿namespace TagTool.App.Resources.Themes;
+
+public partial class LightTheme : ResourceDictionary
 {
-    public partial class LightTheme : ResourceDictionary
+    public LightTheme()
     {
-        public LightTheme()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

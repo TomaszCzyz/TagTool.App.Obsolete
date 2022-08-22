@@ -2,11 +2,11 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:pages="clr-namespace:TagTool.App.Pages"
-             xmlns:views="using:TagTool.App.Views"
              xmlns:models="using:TagTool.App.Models"
-             x:Class="TagTool.App.Pages.MainPage"
-             x:DataType="pages:MainPageViewModel">
+             xmlns:pages1="using:TagTool.App.Controls.Pages"
+             xmlns:views="using:TagTool.App.Controls.Views"
+             x:Class="TagTool.App.Controls.Pages.MainPage"
+             x:DataType="pages1:MainPageViewModel">
 
     <StackLayout>
         <VerticalStackLayout

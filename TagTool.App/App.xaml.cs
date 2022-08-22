@@ -1,4 +1,4 @@
-using TagTool.App.Pages;
+using TagTool.App.Controls.Pages;
 
 namespace TagTool.App;
 

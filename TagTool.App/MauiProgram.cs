@@ -1,7 +1,7 @@
 using Serilog;
 using Serilog.Core.Enrichers;
 using Serilog.Events;
-using TagTool.App.Pages;
+using TagTool.App.Controls.Pages;
 using TagTool.App.Services;
 using TagTool.Backend;
 

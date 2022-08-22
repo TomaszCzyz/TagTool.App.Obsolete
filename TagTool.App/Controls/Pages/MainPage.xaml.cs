@@ -1,4 +1,4 @@
-namespace TagTool.App.Pages;
+namespace TagTool.App.Controls.Pages;
 
 public partial class MainPage : ContentPage
 {

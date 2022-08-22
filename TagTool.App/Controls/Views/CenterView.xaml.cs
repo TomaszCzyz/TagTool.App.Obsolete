@@ -1,4 +1,4 @@
-﻿namespace TagTool.App.Views;
+﻿namespace TagTool.App.Controls.Views;
 
 public partial class CenterView : ContentView
 {

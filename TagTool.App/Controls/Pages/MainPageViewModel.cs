@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using TagTool.App.Models;
 using TagTool.Backend;
 
-namespace TagTool.App.Pages;
+namespace TagTool.App.Controls.Pages;
 
 public partial class MainPageViewModel : ObservableObject, IDisposable
 {
