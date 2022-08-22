@@ -59,7 +59,6 @@
 
   <ItemGroup>
     <Folder Include="Resources\Themes" />
-    <Folder Include="Views" />
   </ItemGroup>
 
 </Project>

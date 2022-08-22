@@ -4,6 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pages="clr-namespace:TagTool.App.Pages"
              xmlns:helpers="using:TagTool.App.Helpers"
+             xmlns:views="using:TagTool.App.Views"
              x:Class="TagTool.App.Pages.MainPage"
              x:DataType="pages:MainPageViewModel">
 
@@ -12,9 +13,8 @@
             Spacing="25"
             Padding="30,0"
             VerticalOptions="Center">
-            <Grid RowDefinitions="{Binding RowDefinitions}"
-                  ColumnDefinitions="{Binding ColumnDefinitions}">
-            </Grid>
+
+            <views:CenterView />
 
             <Image
                 Source="dotnet_bot.png"
@@ -54,7 +54,7 @@
                             <ViewCell>
                                 <Label
                                     x:DataType="helpers:HighlightedMatch"
-                                    FormattedText="{Binding HighlightedText}"/>
+                                    FormattedText="{Binding HighlightedText}" />
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
