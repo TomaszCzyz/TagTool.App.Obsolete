@@ -3,7 +3,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pages="clr-namespace:TagTool.App.Pages"
-             xmlns:views="clr-namespace:TagTool.App.Views"
              xmlns:helpers="using:TagTool.App.Helpers"
              x:Class="TagTool.App.Pages.MainPage"
              x:DataType="pages:MainPageViewModel">
@@ -13,6 +12,9 @@
             Spacing="25"
             Padding="30,0"
             VerticalOptions="Center">
+            <Grid RowDefinitions="{Binding RowDefinitions}"
+                  ColumnDefinitions="{Binding ColumnDefinitions}">
+            </Grid>
 
             <Image
                 Source="dotnet_bot.png"

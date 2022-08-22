@@ -1,11 +1,13 @@
-﻿namespace TagTool.App;
+using TagTool.App.Pages;
+
+namespace TagTool.App;
 
 public partial class App : Application
 {
-	public App()
+    public App(MainPage mainPage)
 	{
 		InitializeComponent();
 
-		MainPage = new AppShell();
-	}
+        MainPage = mainPage;
+    }
 }

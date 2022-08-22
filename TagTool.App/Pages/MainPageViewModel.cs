@@ -38,9 +38,11 @@ public partial class MainPageViewModel : ObservableObject, IDisposable
     async partial void OnSearchBarTextChanged(string value) // todo: make sure that async void won't be a problem here
     {
         // todo: throttle this method to avoid too many calls
-        TagsSearchResults.Clear();
         _cts?.Cancel();
         _cts?.Dispose();
+        TagsSearchResults.Clear();
+        if (string.IsNullOrEmpty(value)) return;
+
         _cts = new CancellationTokenSource();
 
         var matchTagsRequest = new MatchTagsRequest { PartialTagName = value, MaxReturn = 50 };
