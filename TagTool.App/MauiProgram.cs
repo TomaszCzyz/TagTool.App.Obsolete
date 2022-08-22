@@ -21,7 +21,7 @@ public static class MauiProgram
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
             });
-        
+
         builder.Logging.AddSerilog(dispose: true);
 
         builder.Services.AddScoped(_ => // todo: make sure if AddSingleton would not be better here

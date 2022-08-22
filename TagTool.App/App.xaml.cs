@@ -5,8 +5,8 @@ namespace TagTool.App;
 public partial class App : Application
 {
     public App(MainPage mainPage)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 
         MainPage = mainPage;
     }
