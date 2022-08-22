@@ -58,7 +58,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Controls\Layouts" />
     <Folder Include="Resources\Themes" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="Controls\Pages\MainPage.xaml" />
+    <AdditionalFiles Include="Controls\Views\CenterView.xaml" />
   </ItemGroup>
 
 </Project>

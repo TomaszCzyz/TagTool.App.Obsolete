@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Grpc.Core;
 using Microsoft.Extensions.Logging;
-using TagTool.App.Helpers;
+using TagTool.App.Models;
 using TagTool.Backend;
 
 namespace TagTool.App.Pages;

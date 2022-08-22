@@ -1,4 +1,4 @@
-namespace TagTool.App.Helpers;
+namespace TagTool.App.Models;
 
 public class HighlightedMatch
 {
