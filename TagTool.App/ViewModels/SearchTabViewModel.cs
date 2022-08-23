@@ -6,22 +6,34 @@ using Microsoft.Extensions.Logging;
 using TagTool.App.Models;
 using TagTool.Backend;
 
-namespace TagTool.App.Controls.Pages;
+namespace TagTool.App.ViewModels;
 
-public partial class MainPageViewModel : ObservableObject, IDisposable
+public partial class SearchTabViewModel : ObservableObject, IDisposable
 {
-    private readonly ILogger<MainPageViewModel> _logger;
+    private readonly ILogger<SearchTabViewModel> _logger;
     private readonly TagSearchService.TagSearchServiceClient _tagSearchServiceClient;
 
-    public MainPageViewModel(
-        ILogger<MainPageViewModel> logger,
+    public SearchTabViewModel(
+        ILogger<SearchTabViewModel> logger,
         TagSearchService.TagSearchServiceClient tagSearchServiceClient)
     {
         _logger = logger;
         _tagSearchServiceClient = tagSearchServiceClient;
         _tagsSearchResults = new ObservableCollection<HighlightedMatch>();
+        _exampleResults = new ObservableCollection<string>
+        {
+            "Tag1",
+            "Tag1",
+            "Tag1",
+            "Tag1",
+            "Tag1",
+            "Tag1"
+        };
     }
-
+    
+    [ObservableProperty]
+    private ObservableCollection<string> _exampleResults;
+    
     [ObservableProperty]
     private ObservableCollection<HighlightedMatch> _tagsSearchResults;
 
@@ -75,7 +87,7 @@ public partial class MainPageViewModel : ObservableObject, IDisposable
         finally
         {
             // todo: do not create new class... manage existing collection
-            TagsSearchResults = new ObservableCollection<HighlightedMatch>(TagsSearchResults.OrderByDescending(item => item.Score));
+            TagsSearchResults = new ObservableCollection<HighlightedMatch>(Enumerable.OrderByDescending<HighlightedMatch, int>(TagsSearchResults, item => item.Score));
         }
     }
 

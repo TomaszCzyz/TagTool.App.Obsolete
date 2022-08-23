@@ -3,6 +3,7 @@ using Serilog.Core.Enrichers;
 using Serilog.Events;
 using TagTool.App.Controls.Pages;
 using TagTool.App.Services;
+using TagTool.App.ViewModels;
 using TagTool.Backend;
 
 namespace TagTool.App;
@@ -35,7 +36,7 @@ public static class MauiProgram
             return new TagSearchService.TagSearchServiceClient(channel);
         });
         builder.Services.AddSingleton<MainPage>();
-        builder.Services.AddSingleton<MainPageViewModel>();
+        builder.Services.AddSingleton<SearchTabViewModel>();
 
         return builder.Build();
     }

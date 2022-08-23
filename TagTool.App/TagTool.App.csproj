@@ -64,7 +64,6 @@
 
   <ItemGroup>
     <AdditionalFiles Include="Controls\Pages\MainPage.xaml" />
-    <AdditionalFiles Include="Controls\Views\CenterView.xaml" />
   </ItemGroup>
 
 </Project>

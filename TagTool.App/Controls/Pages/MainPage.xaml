@@ -2,68 +2,39 @@
 
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:models="using:TagTool.App.Models"
-             xmlns:pages1="using:TagTool.App.Controls.Pages"
              xmlns:views="using:TagTool.App.Controls.Views"
-             x:Class="TagTool.App.Controls.Pages.MainPage"
-             x:DataType="pages1:MainPageViewModel">
+             x:Class="TagTool.App.Controls.Pages.MainPage">
 
-    <StackLayout>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+    <ContentPage.MenuBarItems>
+        <MenuBarItem Text="File">
+            <MenuFlyoutItem Text="Exit" />
+        </MenuBarItem>
+        <MenuBarItem Text="Locations">
+            <MenuFlyoutSubItem Text="Change Location">
+                <MenuFlyoutItem Text="Redmond, USA"
+                                CommandParameter="Redmond" />
+                <MenuFlyoutItem Text="London, UK"
+                                CommandParameter="London" />
+                <MenuFlyoutItem Text="Berlin, DE"
+                                CommandParameter="Berlin" />
+            </MenuFlyoutSubItem>
+            <MenuFlyoutItem Text="Add Location" />
+        </MenuBarItem>
+        <MenuBarItem Text="View">
+            <MenuFlyoutItem Text="Refresh" />
+            <MenuFlyoutItem Text="Change Theme" />
+        </MenuBarItem>
+    </ContentPage.MenuBarItems>
 
-            <views:CenterView />
+    <Grid
+        ColumnDefinitions="*"
+        RowDefinitions="35,*,20">
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
+        <views:Toolbar Grid.Column="0" Grid.Row="0" />
 
-            <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
+        <views:SearchTab Grid.Column="0" Grid.Row="1" />
 
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
-
-            <Button
-                Text="{Binding BtnText, Mode=OneWay}"
-                Command="{Binding CounterClickedCommand}"
-                SemanticProperties.Hint="Counts the number of times you click"
-                HorizontalOptions="Center" />
-
-            <StackLayout>
-                <SearchBar
-                    x:Name="SearchBar"
-                    Placeholder="enter tag name"
-                    Text="{Binding SearchBarText, Mode=TwoWay}"
-                    SearchCommand="{Binding PerformSearchCommand}"
-                    SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}" />
-                <ListView
-                    ItemsSource="{Binding TagsSearchResults}"
-                    VerticalOptions="Fill">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <ViewCell>
-                                <Label
-                                    x:DataType="models:HighlightedMatch"
-                                    FormattedText="{Binding HighlightedText}" />
-                            </ViewCell>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackLayout>
-
-        </VerticalStackLayout>
-    </StackLayout>
+        <views:StatusBar Grid.Column="0" Grid.Row="2" />
+    </Grid>
 
 </ContentPage>
