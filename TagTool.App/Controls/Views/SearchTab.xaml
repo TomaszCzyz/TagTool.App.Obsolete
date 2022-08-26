@@ -7,36 +7,55 @@
              x:Class="TagTool.App.Controls.Views.SearchTab"
              x:DataType="viewModels:SearchTabViewModel">
 
-    <VerticalStackLayout Margin="20">
-        <HorizontalStackLayout>
+    <AbsoluteLayout Margin="20">
+
+        <HorizontalStackLayout
+            AbsoluteLayout.LayoutBounds="0,0,1,35"
+            AbsoluteLayout.LayoutFlags="WidthProportional">
             <Button Text="AddFav" />
             <Button Text="AddFav" />
         </HorizontalStackLayout>
 
-
         <SearchBar
             x:Name="SearchBar"
+            AbsoluteLayout.LayoutBounds="0,35,1,35"
+            AbsoluteLayout.LayoutFlags="WidthProportional"
             Placeholder="enter tag name"
             Text="{Binding SearchBarText, Mode=TwoWay}"
             SearchCommand="{Binding PerformSearchCommand}"
             SearchCommandParameter="{Binding Text, Source={x:Reference SearchBar}}" />
 
-        <ListView
-            ItemsSource="{Binding TagsSearchResults}"
-            VerticalOptions="Fill">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
+        <!-- use collectionView and allow multiple selection -->
+        <Border
+            Margin="10,0"
+            Opacity="0.3"
+            AbsoluteLayout.LayoutBounds="0,70,1,1"
+            AbsoluteLayout.LayoutFlags="SizeProportional">
+
+            <CollectionView
+                ItemsSource="{Binding TagsSearchResults}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+
                         <Label
+                            FontSize="18"
+                            BackgroundColor="DimGrey"
                             x:DataType="models:HighlightedMatch"
                             FormattedText="{Binding HighlightedText}" />
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        
-        <CollectionView ItemsSource="{Binding ExampleResults}"></CollectionView>
 
-    </VerticalStackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </Border>
+
+
+        <CollectionView
+            Margin="5"
+            AbsoluteLayout.LayoutBounds="0,70,1,1"
+            AbsoluteLayout.LayoutFlags="SizeProportional"
+            ItemsSource="{Binding ExampleResults}" />
+
+    </AbsoluteLayout>
 
 </ContentView>

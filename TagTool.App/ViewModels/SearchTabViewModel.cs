@@ -19,7 +19,16 @@ public partial class SearchTabViewModel : ObservableObject, IDisposable
     {
         _logger = logger;
         _tagSearchServiceClient = tagSearchServiceClient;
-        _tagsSearchResults = new ObservableCollection<HighlightedMatch>();
+        var formattedString = new FormattedString();
+        formattedString.Spans.Add(new Span { Text = "text" });
+
+        _tagsSearchResults = new ObservableCollection<HighlightedMatch>
+        {
+            new() { HighlightedText = formattedString },
+            new() { HighlightedText = formattedString },
+            new() { HighlightedText = formattedString },
+            new() { HighlightedText = formattedString }
+        };
         _exampleResults = new ObservableCollection<string>
         {
             "Tag1",
@@ -30,10 +39,10 @@ public partial class SearchTabViewModel : ObservableObject, IDisposable
             "Tag1"
         };
     }
-    
+
     [ObservableProperty]
     private ObservableCollection<string> _exampleResults;
-    
+
     [ObservableProperty]
     private ObservableCollection<HighlightedMatch> _tagsSearchResults;
 
@@ -49,6 +58,9 @@ public partial class SearchTabViewModel : ObservableObject, IDisposable
 
     async partial void OnSearchBarTextChanged(string value) // todo: make sure that async void won't be a problem here
     {
+        // await Application.Current.MainPage.Navigation.PushModalAsync(new Popup1());
+        // await Application.Current.MainPage.DisplayAlert()
+
         // todo: throttle this method to avoid too many calls
         _cts?.Cancel();
         _cts?.Dispose();
@@ -87,7 +99,9 @@ public partial class SearchTabViewModel : ObservableObject, IDisposable
         finally
         {
             // todo: do not create new class... manage existing collection
-            TagsSearchResults = new ObservableCollection<HighlightedMatch>(Enumerable.OrderByDescending<HighlightedMatch, int>(TagsSearchResults, item => item.Score));
+            TagsSearchResults =
+                new ObservableCollection<HighlightedMatch>(
+                    Enumerable.OrderByDescending<HighlightedMatch, int>(TagsSearchResults, item => item.Score));
         }
     }
 
