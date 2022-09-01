@@ -58,15 +58,12 @@ public partial class SearchTabViewModel : ObservableObject, IDisposable
 
     async partial void OnSearchBarTextChanged(string value) // todo: make sure that async void won't be a problem here
     {
-        // await Application.Current.MainPage.Navigation.PushModalAsync(new Popup1());
-        // await Application.Current.MainPage.DisplayAlert()
-
         // todo: throttle this method to avoid too many calls
-        _cts?.Cancel();
-        _cts?.Dispose();
         TagsSearchResults.Clear();
         if (string.IsNullOrEmpty(value)) return;
 
+        _cts?.Cancel();
+        _cts?.Dispose();
         _cts = new CancellationTokenSource();
 
         var matchTagsRequest = new MatchTagsRequest { PartialTagName = value, MaxReturn = 50 };
@@ -99,9 +96,7 @@ public partial class SearchTabViewModel : ObservableObject, IDisposable
         finally
         {
             // todo: do not create new class... manage existing collection
-            TagsSearchResults =
-                new ObservableCollection<HighlightedMatch>(
-                    Enumerable.OrderByDescending<HighlightedMatch, int>(TagsSearchResults, item => item.Score));
+            TagsSearchResults = new ObservableCollection<HighlightedMatch>(TagsSearchResults.OrderByDescending(item => item.Score));
         }
     }
 
